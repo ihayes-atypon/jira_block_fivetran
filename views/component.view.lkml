@@ -1,14 +1,16 @@
-  view: status {
-    sql_table_name: JIRA.STATUS ;;
+  view: component {
+    sql_table_name: component ;;
 
     dimension: id {
       primary_key: yes
       type: number
+      hidden: yes
       sql: ${TABLE}.ID ;;
     }
 
-    dimension_group: _FIVETRAN_SYNCED {
+    dimension_group: _fivetran_synced {
       type: time
+      hidden: yes
       timeframes: [
         raw,
         time,
@@ -18,7 +20,7 @@
         quarter,
         year
       ]
-      sql: ${TABLE}._fivetran_synced ;;
+      sql: ${TABLE}._FIVETRAN_SYNCED ;;
     }
 
     dimension: description {
@@ -31,14 +33,15 @@
       sql: ${TABLE}.NAME ;;
     }
 
-    dimension: status_category_id {
+    dimension: project_id {
       type: number
-      # hidden: yes
-      sql: ${TABLE}.STATUS_CATEGORY_ID ;;
+      hidden: yes
+      sql: ${TABLE}.PROJECT_ID ;;
     }
 
     measure: count {
       type: count
-      drill_fields: [id, name, status_category.id, status_category.name, issue_status_history.count]
+      hidden: yes
+      drill_fields: [id, name, project.id, project.name]
     }
   }

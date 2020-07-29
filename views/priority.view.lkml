@@ -1,14 +1,16 @@
-  view: project {
-    sql_table_name: JIRA.PROJECT ;;
+  view: priority {
+    sql_table_name: priority ;;
 
     dimension: id {
       primary_key: yes
       type: number
+      hidden: yes
       sql: ${TABLE}.ID ;;
     }
 
-    dimension_group: _FIVETRAN_SYNCED {
+    dimension_group: _fivetran_synced {
       type: time
+      hidden: yes
       timeframes: [
         raw,
         time,
@@ -18,26 +20,24 @@
         quarter,
         year
       ]
-      sql: ${TABLE}._fivetran_synced ;;
+      sql: ${TABLE}._FIVETRAN_SYNCED ;;
     }
 
     dimension: description {
       type: string
+      hidden: yes
       sql: ${TABLE}.DESCRIPTION ;;
     }
 
     dimension: name {
+      label: "Priority"
       type: string
       sql: ${TABLE}.NAME ;;
     }
 
-    dimension: project_category_id {
-      type: number
-      sql: ${TABLE}.PROJECT_CATEGORY_ID ;;
-    }
-
     measure: count {
+      hidden : yes
       type: count
-      drill_fields: [id, name, component.count, issue_project_history.count, version.count]
+      drill_fields: [id, name, issue_priority_history.count]
     }
   }

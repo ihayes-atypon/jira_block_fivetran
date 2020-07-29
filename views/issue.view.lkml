@@ -1,8 +1,9 @@
 view: issue {
-  sql_table_name: jira.issue ;;
+  sql_table_name: issue ;;
 
   dimension: id {
     primary_key: yes
+    hidden: yes
     type: number
     sql: ${TABLE}.id ;;
   }
@@ -18,27 +19,76 @@ view: issue {
       quarter,
       year
     ]
+    hidden: yes
     sql: ${TABLE}._fivetran_synced ;;
   }
 
   dimension: external_issue_id {
     type: string
+    label: "External issue id"
     sql: ${TABLE}.external_issue_id ;;
   }
 
-  dimension: _original_estimate {
+  dimension:_original_estimate {
     type: number
-    sql: ${TABLE}._original_estimate ;;
+    label: "Original estimate (hours)"
+    sql: ${TABLE}.original_estimate / 3600;;
   }
 
-  dimension: _remaining_estimate {
-    type: number
-    sql: ${TABLE}._remaining_estimate ;;
+  measure: sum_original_estimate {
+    type: sum
+    value_format_name: decimal_0
+    label: "Original estimate (hours)"
+    sql:  ${TABLE}.original_estimate / 3600;;
   }
 
-  dimension: _time_spent {
+  measure: average_original_estimate {
+    type: average
+    value_format_name: decimal_0
+    label: "Average original estimate (hours)"
+    sql:  ${TABLE}.original_estimate / 3600;;
+    }
+
+  dimension: remaining_estimate {
     type: number
-    sql: ${TABLE}._time_spent ;;
+    value_format_name: decimal_0
+    label: "Remaining estimate (hours)"
+    sql: ${TABLE}.remaining_estimate / 3600;;
+  }
+
+  measure: sum_remaining_estimate {
+    type: sum
+    value_format_name: decimal_0
+    label: "Remaining estimate (hours)"
+    sql:  ${TABLE}.remaining_estimate / 3600 ;;
+  }
+
+  measure: average_remaining_estimate {
+    type: average
+    value_format_name: decimal_0
+    label: "Average remaining estimate (hours)"
+    sql:  ${TABLE}.remaining_estimate / 3600;;
+  }
+
+  dimension: time_spent {
+    type: number
+    value_format_name: decimal_0
+    label: "Time spent (hours)"
+    sql: ${TABLE}.time_spent / 3600;;
+  }
+
+  measure: sum_time_spent {
+    type: sum
+    value_format_name: decimal_0
+    label: "Time spent (hours)"
+    sql:  ${TABLE}.time_spent / 3600 ;;
+  }
+
+  measure: average_time_spent {
+    type: average
+    value_format_name: decimal_0
+    label: "Average time spent (hours)"
+    sql:  ${TABLE}.time_spent / 3600 ;;
   }
 
   dimension: assignee {
@@ -47,7 +97,6 @@ view: issue {
   }
 
   dimension_group: created {
-    group_label: "Dates"
     type: time
     timeframes: [
       raw,
@@ -73,7 +122,6 @@ view: issue {
   }
 
   dimension_group: due {
-    group_label: "Dates"
     type: time
     timeframes: [
       raw,
@@ -98,10 +146,11 @@ view: issue {
     sql: ${TABLE}.issue_type ;;
   }
 
-  dimension: original_estimate {
-    type: number
-    sql: ${TABLE}.original_estimate ;;
-  }
+  dimension: key {
+    label: "Key"
+    type: string
+    sql: ${TABLE}.key ;;
+    }
 
   dimension: priority {
     type: number
@@ -124,7 +173,7 @@ view: issue {
   }
 
   dimension_group: resolved {
-    group_label: "Resolution"
+    label: "Resolved"
     type: time
     timeframes: [
       raw,
@@ -141,39 +190,28 @@ view: issue {
   # Additional field for a simple way to determine
   # if an issue is resolved
   dimension: is_issue_resolved {
-    group_label: "Resolution"
     type: yesno
+    label: "Is resolved"
     sql: ${resolved_date} IS NOT NULL ;;
   }
 
   # Custom dimensions for time to resolve issue
   dimension: hours_to_resolve_issue {
-    group_label: "Resolution"
     label: "Time to Resolve (Hours)"
     type: number
     sql: DATEDIFF(h,${created_raw},${resolved_raw}) ;;
     value_format_name: decimal_0
   }
 
-  dimension: minutes_to_resolve_issue {
-    group_label: "Resolution"
-    label: "Time to Resolve (Minutes)"
-    type: number
-    sql: DATEDIFF(m,${created_raw},${resolved_raw}) ;;
-    value_format_name: decimal_0
-  }
-
   dimension: days_to_resolve_issue {
-    group_label: "Resolution"
     label: "Time to Resolve (Days)"
     type: number
     sql: DATEDIFF(d,${created_raw},${resolved_raw}) ;;
     value_format_name: decimal_0
   }
 
-  measure: total_time_to_resolve_issues_hours {
-    group_label: "Resolution"
-    label: "Total Time to Resolve Issues per Grouping"
+  measure: sum_duration_resolve {
+    label: "Time to Resolve (hours)"
     description: "The total hours required to resolve all issues in the chosen dimension grouping"
     type: sum
     sql: ${days_to_resolve_issue} ;;
@@ -181,8 +219,7 @@ view: issue {
   }
 
   measure: avg_time_to_resolve_issues_hours {
-    group_label: "Resolution"
-    label: "Avg Time to Resolve Issues per Grouping"
+    label: "Average time to Resolve (hours)"
     description: "The average hours required to resolve all issues in the chosen dimension grouping"
     type: average
     sql: ${days_to_resolve_issue} ;;
@@ -230,7 +267,6 @@ view: issue {
 #  }
 
   dimension_group: updated {
-    group_label: "Dates"
     type: time
     timeframes: [
       raw,
@@ -246,6 +282,7 @@ view: issue {
 
   measure: count {
     type: count
+    label: "Issue count"
     drill_fields: [id, days_to_resolve_issue, created_date, severity ]
   }
 

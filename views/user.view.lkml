@@ -1,5 +1,5 @@
       view: user {
-        sql_table_name: JIRA."USER" ;;
+        sql_table_name: user ;;
 
         dimension: id {
           primary_key: yes
@@ -49,8 +49,15 @@
 
         measure: count {
           type: count
+          label: "User count"
           drill_fields: [detail*]
         }
+
+        dimension: atypon_user {
+          type: yesno
+          label: "Atypon user"
+          sql: strpos(lower(${TABLE}.EMAIL),'atypon.com') > 0 ;;
+          }
 
         # ----- Sets of fields for drilling ------
         set: detail {

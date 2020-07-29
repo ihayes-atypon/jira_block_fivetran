@@ -1,14 +1,16 @@
-  view: priority {
-    sql_table_name: JIRA.PRIORITY ;;
+  view: status_category {
+    sql_table_name: JIRA.STATUS_CATEGORY ;;
 
     dimension: id {
       primary_key: yes
+      hidden: yes
       type: number
       sql: ${TABLE}.ID ;;
     }
 
     dimension_group: _fivetran_synced {
       type: time
+      hidden: yes
       timeframes: [
         raw,
         time,
@@ -21,18 +23,15 @@
       sql: ${TABLE}._FIVETRAN_SYNCED ;;
     }
 
-    dimension: description {
-      type: string
-      sql: ${TABLE}.DESCRIPTION ;;
-    }
-
     dimension: name {
       type: string
+      label: "Status category"
       sql: ${TABLE}.NAME ;;
     }
 
     measure: count {
       type: count
-      drill_fields: [id, name, issue_priority_history.count]
+      hidden: yes
+      drill_fields: [id, name, status.count]
     }
   }

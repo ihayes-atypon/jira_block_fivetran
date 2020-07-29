@@ -14,8 +14,6 @@
 # that is meaningful for your users.  There can be lots of columns
 # so make them as easy to work woth as possible.
 
-explore: issue_extended {}
-
 view: issue_extended {
   derived_table: {
     datagroup_trigger: fivetran_datagroup
@@ -105,7 +103,7 @@ view: issue_extended {
 
         ;;
 
-    indexes: ["id"]
+    # indexes: ["id"]
   }
 
   dimension: id {

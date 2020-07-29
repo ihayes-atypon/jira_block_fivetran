@@ -1,15 +1,16 @@
-  view: issue_type {
-
-    sql_table_name: JIRA.ISSUE_TYPE ;;
+  view: status {
+    sql_table_name: JIRA.STATUS ;;
 
     dimension: id {
       primary_key: yes
       type: number
+      hidden: yes
       sql: ${TABLE}.ID ;;
     }
 
-    dimension_group: _fivetran_synced {
+    dimension_group: _FIVETRAN_SYNCED {
       type: time
+      hidden: yes
       timeframes: [
         raw,
         time,
@@ -19,31 +20,30 @@
         quarter,
         year
       ]
-      sql: ${TABLE}._FIVETRAN_SYNCED ;;
+      sql: ${TABLE}._fivetran_synced ;;
     }
 
     dimension: description {
       type: string
+      label: "Status description"
       sql: ${TABLE}.DESCRIPTION ;;
     }
 
     dimension: name {
       type: string
+      label: "Status"
       sql: ${TABLE}.NAME ;;
     }
 
-    dimension: subtask {
-      type: yesno
-      sql: ${TABLE}.SUBTASK ;;
-    }
-
-    dimension: is_bug {
-      type: yesno
-      sql: ${name} = 'Bug' ;;
+    dimension: status_category_id {
+      type: number
+      hidden: yes
+      sql: ${TABLE}.STATUS_CATEGORY_ID ;;
     }
 
     measure: count {
+      hidden: yes
       type: count
-      drill_fields: [id, name]
+      drill_fields: [id, name, status_category.id, status_category.name, issue_status_history.count]
     }
   }

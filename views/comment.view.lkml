@@ -1,14 +1,16 @@
   view: comment {
-    sql_table_name: JIRA.COMMENT ;;
+    sql_table_name: comment ;;
 
     dimension: id {
       primary_key: yes
       type: number
+      hidden: yes
       sql: ${TABLE}.ID ;;
     }
 
     dimension_group: _fivetran_synced {
       type: time
+      hidden: yes
       timeframes: [
         raw,
         time,
@@ -23,6 +25,7 @@
 
     dimension: author_id {
       type: string
+      label: "Author Id"
       sql: ${TABLE}.AUTHOR_ID ;;
     }
 
@@ -47,7 +50,7 @@
 
     dimension: issue_id {
       type: number
-      # hidden: yes
+      hidden: yes
       sql: ${TABLE}.ISSUE_ID ;;
     }
 
@@ -72,6 +75,7 @@
 
     measure: count {
       type: count
+      label: "Comment count"
       drill_fields: [id, issue.id, issue.epic_name]
     }
   }
