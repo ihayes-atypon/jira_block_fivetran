@@ -86,7 +86,7 @@ view: worklog {
   dimension: author_id {
     type: string
     label: "Work author"
-    sql: case when  ${TABLE}.update_author_id is not null then  ${TABLE}.update_author_id else ${TABLE}.author_id end   ;;
+    sql: case when (${TABLE}.update_author_id is not null) then ${TABLE}.update_author_id else ${TABLE}.author_id end   ;;
   }
 
   dimension_group: updated {
@@ -116,7 +116,7 @@ view: worklog {
       quarter,
       year
     ]
-    sql: case when ${TABLE}.updated is not null then ${TABLE}.updated else${TABLE}.started end ;;
+    sql: case when (${TABLE}.updated is not null) then ${TABLE}.updated else ${TABLE}.started end ;;
     }
 
   measure: count {
