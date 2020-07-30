@@ -243,6 +243,12 @@ view: issue {
     sql: ${TABLE}.story_points ;;
   }
 
+  dimension: summary {
+    type: string
+    label: "Summary"
+    sql: ${TABLE}.summary ;;
+    }
+
   measure: total_story_points {
     type: sum
     sql: ${story_points} ;;
