@@ -78,4 +78,6 @@
       label: "Comment count"
       drill_fields: [id, issue.id, issue.epic_name]
     }
+
+
   }

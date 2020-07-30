@@ -1,5 +1,3 @@
-explore: looker_calendar {}
-
 view: looker_calendar {
 #   Daily calendar used for sprint burndown chart
 #   Replace the hard coded date with the correct SQL
