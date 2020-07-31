@@ -1,5 +1,5 @@
 view: issue_labels {
-  sql_table_name: JIRA.ISSUE_LABELS ;;
+  sql_table_name: issue_labels;;
 
   dimension: _fivetran_synced {
     type: string
