@@ -99,6 +99,11 @@ explore: issue {
     relationship: one_to_many
     sql_on: ${issue.id} = ${derived_issue_status_history.issue_id} ;;
   }
+  join: issue_labels {
+    view_label: "Label"
+    relationship: one_to_many
+    sql_on: ${issue.id} = ${issue_labels.issue_id} ;;
+  }
 
 }
 
