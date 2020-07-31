@@ -99,15 +99,20 @@ explore: issue {
     relationship: one_to_many
     sql_on: ${issue.id} = ${derived_issue_status_history.issue_id} ;;
   }
-  join: issue_labels {
+  # join: issue_labels {
+  #   view_label: "Label"
+  #   relationship: one_to_many
+  #   sql_on: ${issue.id} = ${issue_labels.issue_id} ;;
+  # }
+  # join: issue_labels_history {
+  #   view_label: "Label history"
+  #   relationship: one_to_many
+  #   sql_on: ${issue.id} = ${issue_labels_history.issue_id} ;;
+  # }
+  join: derived_issue_labels {
     view_label: "Label"
     relationship: one_to_many
-    sql_on: ${issue.id} = ${issue_labels.issue_id} ;;
-  }
-  join: issue_labels_history {
-    view_label: "Label history"
-    relationship: one_to_many
-    sql_on: ${issue.id} = ${issue_labels_history.issue_id} ;;
+    sql_on: ${issue.id} = ${derived_issue_labels.issue_id} ;;
   }
 
 }

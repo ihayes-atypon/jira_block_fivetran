@@ -69,6 +69,7 @@
 
     measure: count {
       type: count
+      hidden: yes
       drill_fields: [id, name]
     }
   }
