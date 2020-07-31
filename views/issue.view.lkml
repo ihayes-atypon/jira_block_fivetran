@@ -195,37 +195,14 @@ view: issue {
     sql: ${resolved_date} IS NOT NULL ;;
   }
 
-  # Custom dimensions for time to resolve issue
-  dimension: hours_to_resolve_issue {
-    label: "Time to Resolve (Hours)"
-    type: number
-    sql: DATEDIFF(h,${created_raw},${resolved_raw}) ;;
-    value_format_name: decimal_0
-  }
+  dimension_group: duration_resolved {
+    type: duration
+    label: "Resolve duration"
+    intervals: [hour,day,week,month]
+    sql_start:${TABLE}.created  ;;
+    sql_end:  ${TABLE}.resolved ;;
 
-  dimension: days_to_resolve_issue {
-    label: "Time to Resolve (Days)"
-    type: number
-    sql: DATEDIFF(d,${created_raw},${resolved_raw}) ;;
-    value_format_name: decimal_0
   }
-
-  measure: sum_duration_resolve {
-    label: "Time to Resolve (hours)"
-    description: "The total hours required to resolve all issues in the chosen dimension grouping"
-    type: sum
-    sql: ${days_to_resolve_issue} ;;
-    value_format_name: decimal_0
-  }
-
-  measure: avg_time_to_resolve_issues_hours {
-    label: "Average time to Resolve (hours)"
-    description: "The average hours required to resolve all issues in the chosen dimension grouping"
-    type: average
-    sql: ${days_to_resolve_issue} ;;
-    value_format_name: decimal_0
-  }
-
   dimension: severity {
     hidden: yes
     type: number
@@ -289,7 +266,18 @@ view: issue {
   measure: count {
     type: count
     label: "Issue count"
-    drill_fields: [id, days_to_resolve_issue, created_date, severity ]
+  }
+
+  measure: count_open {
+    type: count
+    label: "Open issue count"
+    filters: [is_issue_resolved: "no"]
+  }
+
+  measure: count_resolved {
+    type: count
+    label: "Resolved issue count"
+    filters: [is_issue_resolved: "yes"]
   }
 
   # ----- Sets of fields for drilling ------
