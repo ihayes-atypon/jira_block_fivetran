@@ -150,7 +150,31 @@ view: issue {
     label: "Key"
     type: string
     sql: ${TABLE}.key ;;
-    }
+  }
+
+  dimension: nps {
+    label: "NPS"
+    type: number
+    sql: ${TABLE}.net_promoter_score ;;
+  }
+
+  measure: average_nps {
+    type: average
+    label: "Average NPS"
+    sql: ${TABLE}.net_promoter_score ;;
+  }
+
+  measure: min_nps {
+    type: min
+    label: "Minimum NPS"
+    sql: ${TABLE}.net_promoter_score ;;
+  }
+
+  measure: max_nps {
+    type: max
+    label: "Maximum NPS"
+    sql: ${TABLE}.net_promoter_score ;;
+  }
 
   dimension: priority {
     type: number
