@@ -1,3 +1,4 @@
+
 view: issue {
   sql_table_name: issue ;;
 
@@ -155,23 +156,27 @@ view: issue {
   dimension: nps {
     label: "NPS"
     type: number
+    value_format_name: decimal_0
     sql: ${TABLE}.net_promoter_score ;;
   }
 
   measure: average_nps {
     type: average
     label: "Average NPS"
+    value_format_name: decimal_1
     sql: ${TABLE}.net_promoter_score ;;
   }
 
   measure: min_nps {
     type: min
+    value_format_name: decimal_0
     label: "Minimum NPS"
     sql: ${TABLE}.net_promoter_score ;;
   }
 
   measure: max_nps {
     type: max
+    value_format_name: decimal_0
     label: "Maximum NPS"
     sql: ${TABLE}.net_promoter_score ;;
   }
