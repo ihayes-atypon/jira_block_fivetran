@@ -36,7 +36,7 @@ explore: issue {
     from: project
     relationship: many_to_one
     fields: [component_project.name]
-    sql_on: ${component.project_id} = ${project.id} ;;
+    sql_on: ${component.project_id} = ${component_project.id} ;;
   }
   join: status {
     view_label: "Issue"

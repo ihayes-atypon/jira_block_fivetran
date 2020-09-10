@@ -80,6 +80,12 @@ view: derived_issue_status_history {
     sql: ${TABLE}.preceding_status_name ;;
   }
 
+  dimension: status_trasnsition {
+    type: string
+    label: "Status transition"
+    sql: case when (${preceding_status_name} is null) then ${status_name} else CONCAT(${preceding_status_name}," to ",${status_name}) end ;;
+  }
+
   dimension_group: preceding_time {
     type: time
     group_label: "Preceding"
