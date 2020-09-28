@@ -216,6 +216,12 @@ view: issue {
     sql: ${TABLE}.resolved ;;
   }
 
+  dimension: client_name {
+    type: string
+    label: "Client"
+    sql:  ${TABLE}.client_name;;
+  }
+
   # Additional field for a simple way to determine
   # if an issue is resolved
   dimension: is_issue_resolved {
