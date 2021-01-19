@@ -141,6 +141,12 @@ view: issue {
     sql: ${TABLE}.environment ;;
   }
 
+  dimension: epic_link {
+    type: number
+    hidden: yes
+    sql: ${TABLE}.epic_link ;;
+  }
+
   dimension: issue_type {
     hidden: yes
     type: number
