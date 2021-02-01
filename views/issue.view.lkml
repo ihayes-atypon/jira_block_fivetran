@@ -143,7 +143,6 @@ view: issue {
 
   dimension: epic_link {
     type: number
-    hidden: yes
     sql: ${TABLE}.epic_link ;;
   }
 

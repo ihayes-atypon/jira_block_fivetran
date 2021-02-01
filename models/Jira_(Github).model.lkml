@@ -119,6 +119,21 @@ explore: issue {
     relationship: many_to_one
     sql_on: ${issue.epic_link} = ${epic.id} ;;
   }
+  join: derived_guild_member {
+    view_label: "Guild member"
+    relationship: many_to_one
+    sql_on: ${issue.assignee} = ${derived_guild_member.assignee};;
+  }
+  join: derived_guild {
+    view_label: "Guild"
+    relationship: many_to_one
+    sql_on: ${derived_guild_member.epic_link} = ${derived_guild.id} ;;
+  }
+  join: derived_guild_member2 {
+    from: derived_guild_member
+    relationship: many_to_one
+    sql_on: ${worklog.author_id} = ${derived_guild_member.assignee} ;;
+  }
 
 }
 
