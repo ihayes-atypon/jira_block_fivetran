@@ -111,6 +111,14 @@ view: issue {
     sql: ${TABLE}.created ;;
   }
 
+  dimension_group: created_to_now {
+    label: "Created to now"
+    type: duration
+    intervals: [hour,day,week,month]
+    sql_start:${TABLE}.created  ;;
+    sql_end:  now() ;;
+    }
+
   dimension: department {
     hidden: yes
     type: number
@@ -237,7 +245,7 @@ view: issue {
 
   dimension_group: duration_resolved {
     type: duration
-    label: "Resolve duration"
+    label: "Resolved"
     intervals: [hour,day,week,month]
     sql_start:${TABLE}.created  ;;
     sql_end:  ${TABLE}.resolved ;;
