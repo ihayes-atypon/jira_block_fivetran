@@ -129,4 +129,11 @@ explore: issue {
     sql_on: ${derived_guild_member.epic_link} = ${derived_guild.id} ;;
   }
 
+  join: derived_monthly_issue_status {
+    view_label: "Monthly status history"
+    relationship: one_to_many
+    sql_on: ${issue.id} = ${derived_monthly_issue_status.id} ;;
+
+  }
+
 }

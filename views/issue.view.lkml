@@ -327,4 +327,232 @@ view: issue {
   #  ]
   #}
 
+  dimension:archiver{
+    type: string
+    label: "Archiver"
+    sql: ${TABLE}.archiver;;
+  }
+
+  dimension_group: archived {
+    type: time
+    label: "Archived"
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}.archived ;;
+  }
+
+  dimension: incident_trigger_source {
+    type: string
+    label: "Incident trigger source"
+    sql: ${TABLE}.incident_trigger_source ;;
+  }
+
+  dimension: incident_trigger {
+    type: string
+    label: "Incident trigger"
+    sql: ${TABLE}.incident_trigger ;;
+  }
+
+  dimension: teams {
+    type: string
+    label: "Teams"
+    sql: ${TABLE}.teams ;;
+  }
+
+  dimension: sa_owner {
+    type: string
+    label: "SA owner"
+    sql: ${TABLE}.sa_owner ;;
+  }
+
+  dimension: survey_updated {
+    type: string
+    label: "Survey updated"
+    sql: ${TABLE}.survey_updated ;;
+  }
+
+  dimension_group: mar_updated {
+    type: time
+    timeframes: [
+      raw,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    label: "Market awareness updated"
+    sql: ${TABLE}.mar_updated ;;
+  }
+
+  dimension: market_awareness_results {
+    type: number
+    label: "Market awareness results"
+    sql: ${TABLE}.market_awareness_results ;;
+  }
+
+  dimension: jira_customer_satisfaction_survey {
+    type: number
+    label: "Jira customer satisfactioin survey"
+    sql: ${TABLE}.jira_customer_satisfaction_survey ;;
+  }
+
+  dimension: ui_type {
+    type: number
+    label: "UI type"
+    sql: ${TABLE}.ui_type ;;
+  }
+
+  dimension: test_case_automation {
+    type: number
+    label: "Test case automation"
+    sql: ${TABLE}.test_case_automation ;;
+  }
+
+  dimension: team_type {
+    type: number
+    label: "Team type"
+    sql: ${TABLE}.team_type ;;
+  }
+
+  dimension: subjective_client_rating {
+    type: number
+    label: "Subjective client rating"
+    sql: ${TABLE}.subjective_client_rating ;;
+  }
+
+  dimension: status_meeting_frequency {
+    type: number
+    label: "Status meeting frequency"
+    sql: ${TABLE}.status_meeting_frequency ;;
+  }
+
+  dimension_group: sh_updated {
+    type: time
+    timeframes: [
+      raw,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    label: "SH updated"
+    sql: ${TABLE}.sh_updated ;;
+  }
+
+  dimension_group: nps_updated {
+    type: time
+    timeframes: [
+      raw,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    label: "NPS updated"
+    sql: ${TABLE}.nps_updated ;;
+  }
+
+  dimension: net_promoter_score {
+    type: number
+    label: "Net promoter score"
+    sql: ${TABLE}.net_promoter_score ;;
+  }
+
+  dimension: hotline_customer {
+    type: number
+    label: "Hotline customer"
+    sql: ${TABLE}.hotline_customer ;;
+  }
+
+  dimension: financial_health {
+    type: number
+    label: "Financial health"
+    sql: ${TABLE}.financial_health ;;
+  }
+
+  dimension_group: fh_updated {
+    type: time
+    timeframes: [
+      raw,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    label: "FH updated"
+    sql: ${TABLE}.fh_updated ;;
+  }
+
+  dimension: escalations {
+    type: string
+    label: "Escalations"
+    sql: ${TABLE}.escalations ;;
+  }
+
+  dimension: customfield_10202 {
+    type: number
+    label: "customfield_10202"
+    sql: ${TABLE}.customfield_10202 ;;
+  }
+
+  dimension: company_type {
+    type: string
+    label: "Company type"
+    sql: ${TABLE}.company_type ;;
+  }
+
+  dimension: client_location {
+    type: string
+    label: "Client location"
+    sql: ${TABLE}.client_location ;;
+  }
+
+  dimension: client_confluence_space {
+    type: string
+    label: "Client_confluence space"
+    sql: ${TABLE}.client_confluence_space ;;
+  }
+
+  dimension: backup_assignee_csr_am {
+    type: string
+    label: "backup assignee csr am"
+    sql: ${TABLE}.backup_assignee_csr_am ;;
+  }
+
+  dimension: account_review_frequency {
+    type: number
+    label: "Account review frequency"
+    sql: ${TABLE}.account_review_frequency ;;
+  }
+
+  dimension: sequence {
+    type: number
+    label: "Sequence"
+    sql: ${TABLE}.sequence ;;
+  }
+
+  dimension: root_cause {
+    type: number
+    label: "Root cause"
+    hidden: yes
+    sql: ${TABLE}.root_cause ;;
+  }
+
+  dimension: atypon_lead {
+    type: string
+    label: "Atypon lead"
+    sql: ${TABLE}.atypon_lead ;;
+  }
+
 }

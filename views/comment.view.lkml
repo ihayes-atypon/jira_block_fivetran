@@ -73,6 +73,12 @@
       sql: ${TABLE}.UPDATED ;;
     }
 
+    dimension: is_public {
+      type: yesno
+      label: "Is public"
+      sql: ${TABLE}.is_public  ;;
+    }
+
     measure: count {
       type: count
       label: "Comment count"
