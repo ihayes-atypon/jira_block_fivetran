@@ -146,26 +146,51 @@ view: derived_monthly_issue_status {
 
   dimension: closed_at_month_end {
     type: yesno
-    label: "Closed"
+    label: "Closed at end of month"
     sql: ${TABLE}.monthEndStatusName IN ('Closed')  ;;
   }
 
   measure: count_closed_in_month {
     type: count
-    label: "Closed in month"
+    label: "Closed at end of month"
     filters: [most_recent_transition_in_month: "yes",closed_at_month_end: "yes"]
   }
 
-  dimension: not_closed_at_month_end {
+  dimension: resolved_at_month_end {
     type: yesno
-    label: "Not closed at month end"
-    sql: ${closed_at_month_end} = false ;;
+    label: "Resolved at month end"
+    sql: ${TABLE}.monthEndStatusName IN ('Resolved')  ;;
   }
 
-  measure: count_cumulative_not_closed_at_month_end {
+  measure: count_resolved_in_month {
     type: count
-    label: "Not closed cumulative"
-    filters: [not_closed_at_month_end: "yes"]
+    label: "Resolved at end of month"
+    filters: [most_recent_transition_in_month: "yes",resolved_at_month_end: "yes"]
+  }
+
+  dimension: resolved_or_closed_at_month_end {
+    type: yesno
+    label: "Resolved or closed at month end"
+    sql: ${TABLE}.monthEndStatusName IN ('Resolved','Closed')  ;;
+  }
+
+  measure: count_resolved_or_closed_in_month {
+    type: count
+    label: "Resolved or closed at end of month"
+    filters: [most_recent_transition_in_month: "yes",resolved_or_closed_at_month_end: "yes"]
+  }
+
+
+  dimension: not_closed_nor_resolved_at_month_end {
+    type: yesno
+    label: "Not closed or resolved at month end"
+    sql: ${resolved_or_closed_at_month_end} = false ;;
+  }
+
+  measure: count_cumulative_not_closed_nor_resolved_at_month_end {
+    type: count
+    label: "Not closed or resolved cumulative"
+    filters: [not_closed_nor_resolved_at_month_end: "yes"]
   }
 
 }
