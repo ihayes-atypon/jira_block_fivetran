@@ -58,7 +58,7 @@ explore: issue {
   join: priority {
     view_label: "Issue"
     relationship: many_to_one
-    fields: [priority.name]
+    fields: [priority.name,priority.value]
     sql_on: ${issue.priority} = ${priority.id} ;;
   }
   join: resolution {

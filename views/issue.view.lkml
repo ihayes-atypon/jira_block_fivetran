@@ -116,7 +116,14 @@ view: issue {
     type: duration
     intervals: [hour,day,week,month]
     sql_start:${TABLE}.created  ;;
-    sql_end:  now() ;;
+    sql_end:  CURRENT_TIMESTAMP() ;;
+  }
+
+  dimension: created_to_now_tier {
+    type:  tier
+    tiers: [0,10,30,60,90,180,270,360]
+    style: relational
+    sql: ${days_created_to_now} ;;
   }
 
   dimension: creator {
