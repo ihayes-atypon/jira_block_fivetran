@@ -56,8 +56,8 @@
         dimension: atypon_user {
           type: yesno
           label: "Atypon user"
-          sql: strpos(lower(${TABLE}.EMAIL),'atypon.com') > 0 ;;
-          }
+          sql: STRPOS( LOWER(${TABLE}.EMAIL),'atypon.com') > 0  ;;
+        }
 
         # ----- Sets of fields for drilling ------
         set: detail {

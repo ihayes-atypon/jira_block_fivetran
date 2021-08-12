@@ -25,6 +25,11 @@ explore: issue {
     relationship: one_to_many
     sql_on: ${issue.id} = ${issue_component_s.issue_id} ;;
   }
+  join: user {
+    view_label: "Creator user"
+    relationship: many_to_one
+    sql_on: ${issue.creator} = ${user.id} ;;
+  }
   join: component {
     view_label: "Component"
     relationship: one_to_many

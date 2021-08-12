@@ -117,6 +117,13 @@ view: issue {
     intervals: [hour,day,week,month]
     sql_start:${TABLE}.created  ;;
     sql_end:  now() ;;
+  }
+
+  dimension: creator {
+    type: string
+    label: "Creator"
+    hidden: yes
+    sql: ${TABLE}.creator ;;
     }
 
   dimension: department {
