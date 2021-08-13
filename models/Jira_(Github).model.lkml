@@ -73,7 +73,7 @@ explore: issue {
     sql_on: ${issue.id} = ${worklog.issue_id} ;;
   }
   join: issue_type {
-    view_label: "Issue"
+    view_label: "Issue type"
     relationship: many_to_one
     sql_on: ${issue.issue_type} = ${issue_type.id} ;;
   }

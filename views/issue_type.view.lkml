@@ -5,6 +5,7 @@
     dimension: id {
       primary_key: yes
       type: number
+      hidden: yes
       sql: ${TABLE}.ID ;;
     }
 
@@ -25,6 +26,7 @@
 
     dimension: description {
       type: string
+      label: "Issue type description"
       sql: ${TABLE}.description ;;
     }
 
@@ -36,31 +38,39 @@
 
     dimension: subtask {
       type: yesno
+      label: "Is sub task"
       sql: ${TABLE}.subtask ;;
     }
 
     dimension: is_bug {
       type: yesno
-      sql: ${name} = 'Bug' ;;
+      label: "Is bug"
+      sql: LOWER(${name}) = 'bug' ;;
+    }
+
+    dimension: client_related {
+      type: yesno
+      label: "Client related ticket"
+      sql: LOWER(trim(${TABLE}.name)) IN ('task','improvement','inquiry','bug','story','incident','milestone') ;;
     }
 
     dimension: type_category {
       label: "Issue type category"
      case: {
        when: {
-         sql: ${name} = 'Bug' ;;
+         sql: LOWER(${name}) = 'bug' ;;
          label: "Bug"
        }
       when: {
-        sql: trim(${name}) IN ('Story','Improvement') ;;
+        sql: LOWER(trim(${name})) IN ('story','improvement','change request') ;;
         label: "Improvement"
       }
       when: {
-        sql: trim(${name}) IN ('Story','Incident') ;;
+        sql: LOWER(trim(${name})( IN ('Incident') ;;
         label: "Incident"
       }
       when: {
-        sql: trim(${name}) IN ('Inquiry') ;;
+        sql: LOWER(trim(${name})) IN ('inquiry') ;;
         label: "Inquiry"
       }
       else: "Other"
