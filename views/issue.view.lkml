@@ -122,7 +122,7 @@ view: issue {
   dimension: created_to_now_tier {
     type:  tier
     tiers: [0,10,30,60,90,180,270,360]
-    style: relational
+    style: integer
     sql: ${days_created_to_now} ;;
   }
 
