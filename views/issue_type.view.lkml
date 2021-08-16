@@ -66,7 +66,7 @@
         label: "Improvement"
       }
       when: {
-        sql: LOWER(trim(${name})) IN ('Incident') ;;
+        sql: LOWER(trim(${name})) IN ('incident') ;;
         label: "Incident"
       }
       when: {
