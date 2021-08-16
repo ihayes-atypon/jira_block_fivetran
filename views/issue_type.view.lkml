@@ -62,11 +62,11 @@
          label: "Bug"
        }
       when: {
-        sql: LOWER(trim(${name})) IN ('story','improvement','change request','task','task.','milestone') ;;
+        sql: LOWER(TRIM( ${name} )) IN ('story','improvement','change request','task','task.','milestone') ;;
         label: "Improvement"
       }
       when: {
-        sql: LOWER(trim(${name})( IN ('Incident') ;;
+        sql: LOWER(trim(${name})) IN ('Incident') ;;
         label: "Incident"
       }
       when: {
