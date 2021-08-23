@@ -174,19 +174,25 @@ view: derived_monthly_issue_status {
   dimension: open_at_month_end {
     type: yesno
     label: "Open at month end"
-    sql:  case when ${resolved_date} is null OR ${resolved_date} > ${end_of_month_date} then true else false end;;
+    sql:  case when (${resolved_date} is null) OR (${resolved_date} > ${end_of_month_date}) then true else false end;;
   }
+
+  dimension: resolved_in_month {
+    type: yesno
+    label: "Resolved in month"
+    sql:   ${TABLE}.resolved >= TIMESTAMP_TRUNC(${TABLE}.EndOfMonth,MONTH) AND ${TABLE}.resolved <= ${TABLE}.EndOfMonth ;;
+    }
 
   dimension: resolved_at_month_end {
     type: yesno
     label: "Resolved at end of month"
-    sql: ${open_at_month_end} = false  ;;
+    sql: ${resolved_date} <= ${end_of_month_date}  ;;
   }
 
   measure: count_resolved_in_month {
     type: count
     label: "Resolved in month"
-    filters: [most_recent_transition_in_month: "yes",resolved_at_month_end: "yes"]
+    filters: [resolved_in_month: "yes"]
   }
 
   dimension: closed_in_month {
