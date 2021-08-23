@@ -3,7 +3,7 @@ view: derived_monthly_issue_status {
     sql: WITH reportMonth AS (
          SELECT TIMESTAMP_SUB(TIMESTAMP(endOfMonthDate),INTERVAL 1 SECOND) as endOfMonth FROM UNNEST(
                    GENERATE_DATE_ARRAY(
-                           DATE_SUB(DATE_TRUNC(DATE_ADD(CURRENT_DATE(),INTERVAL 1 MONTH),MONTH),INTERVAL 37 MONTH),
+                           DATE_SUB(DATE_TRUNC(DATE_ADD(CURRENT_DATE(),INTERVAL 1 MONTH),MONTH),INTERVAL 253 MONTH),
                            DATE_TRUNC(DATE_ADD(CURRENT_DATE(),INTERVAL 1 MONTH),MONTH),
                           INTERVAL 1 MONTH)
         ) AS endOfMonthDate
