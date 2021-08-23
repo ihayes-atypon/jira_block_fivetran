@@ -51,7 +51,7 @@
     dimension: client_related {
       type: yesno
       label: "Client related ticket"
-      sql: LOWER(trim(${TABLE}.name)) IN ('task','improvement','inquiry','bug','story','incident','milestone','task.') ;;
+      sql: LOWER(trim(${TABLE}.name)) IN ('task','improvement','inquiry','bug','story','incident','milestone','task.','epic') ;;
     }
 
     dimension: type_category {
@@ -62,7 +62,7 @@
          label: "Bug"
        }
       when: {
-        sql: LOWER(TRIM( ${name} )) IN ('story','improvement','change request','task','task.','milestone') ;;
+        sql: LOWER(TRIM( ${name} )) IN ('story','improvement','change request','task','task.','milestone','epic') ;;
         label: "Improvement"
       }
       when: {
