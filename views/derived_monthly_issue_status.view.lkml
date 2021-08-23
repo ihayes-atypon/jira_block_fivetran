@@ -21,14 +21,15 @@ view: derived_monthly_issue_status {
       SELECT
             i.id,
             i.created as started,
+            i.resolved,
             m.EndOfMonth,
             ARRAY_AGG(newStatusName ORDER BY changed DESC)[OFFSET(0)] as monthEndStatusName,
             ARRAY_AGG(newStatusId ORDER BY changed DESC)[OFFSET(0)] as monthEndStatusId,
-            ARRAY_AGG(changed ORDER BY changed DESC)[OFFSET(0)] as mostRecentChange
+            ARRAY_AGG(changed ORDER BY changed DESC)[OFFSET(0)] as mostRecentChange,
             FROM issue i
             CROSS JOIN reportMonth m
             INNER JOIN ex_issue_state_history e ON i.id = e.issue_id AND e.changed <= m.endOfMonth
-            GROUP BY 1, 2, 3
+            GROUP BY 1, 2, 3, 4
             order by 1,2 asc
        ;;
   }
@@ -94,8 +95,34 @@ view: derived_monthly_issue_status {
   dimension: month_end_status_name {
     type: string
     label: "Month end status"
-    sql: ${TABLE}.monthEndStatusName ;;
+    sql: case
+           when ${open_at_month_end} = false and ${TABLE}.monthEndStatusName not in ('Resolved', 'Closed') then 'Resolved'
+           else ${TABLE}.monthEndStatusName
+          end;;
   }
+
+  dimension_group: resolved {
+    type: time
+    timeframes: [
+      raw,
+      date,
+      month,
+      month_name,
+      month_num,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}.resolved ;;
+  }
+
+  dimension_group: created_to_resolved {
+    type: duration
+    label: "Created to resolved"
+    intervals: [hour,day,week,month]
+    sql_start:${TABLE}.started ;;
+    sql_end:  ${resolved_date}  ;;
+  }
+
 
   dimension: month_end_status_id {
     type: number
@@ -144,53 +171,40 @@ view: derived_monthly_issue_status {
     sql:   ${TABLE}.mostRecentChange >= TIMESTAMP_TRUNC(${TABLE}.EndOfMonth,MONTH) AND ${TABLE}.mostRecentChange <= ${TABLE}.EndOfMonth ;;
   }
 
-  dimension: closed_at_month_end {
+  dimension: open_at_month_end {
     type: yesno
-    label: "Closed at end of month"
-    sql: ${TABLE}.monthEndStatusName IN ('Closed')  ;;
-  }
-
-  measure: count_closed_in_month {
-    type: count
-    label: "Closed at end of month"
-    filters: [most_recent_transition_in_month: "yes",closed_at_month_end: "yes"]
+    label: "Open at month end"
+    sql:  case when ${resolved_date} is null OR ${resolved_date} > ${end_of_month_date} then true else false end;;
   }
 
   dimension: resolved_at_month_end {
     type: yesno
-    label: "Resolved at month end"
-    sql: ${TABLE}.monthEndStatusName IN ('Resolved')  ;;
+    label: "Resolved at end of month"
+    sql: ${open_at_month_end} = false  ;;
   }
 
   measure: count_resolved_in_month {
     type: count
-    label: "Resolved at end of month"
+    label: "Resolved in month"
     filters: [most_recent_transition_in_month: "yes",resolved_at_month_end: "yes"]
   }
 
-  dimension: resolved_or_closed_at_month_end {
+  dimension: closed_in_month {
     type: yesno
-    label: "Resolved or closed at month end"
-    sql: ${TABLE}.monthEndStatusName IN ('Resolved','Closed')  ;;
+    label: "Closed in month"
+    sql:  ${month_end_status_name} = 'Closed' and ${most_recent_transition_in_month} = true;;
   }
 
-  measure: count_resolved_or_closed_in_month {
+  measure: count_closed_in_month {
     type: count
-    label: "Resolved or closed at end of month"
-    filters: [most_recent_transition_in_month: "yes",resolved_or_closed_at_month_end: "yes"]
+    label: "Closed in month"
+    filters: [most_recent_transition_in_month: "yes",closed_in_month: "yes"]
   }
 
-
-  dimension: not_closed_nor_resolved_at_month_end {
-    type: yesno
-    label: "Not closed or resolved at month end"
-    sql: ${resolved_or_closed_at_month_end} = false ;;
-  }
-
-  measure: count_cumulative_not_closed_nor_resolved_at_month_end {
+  measure: count_cumulative_open_at_month_end {
     type: count
-    label: "Not closed or resolved cumulative"
-    filters: [not_closed_nor_resolved_at_month_end: "yes"]
+    label: "Open cumulative"
+    filters: [open_at_month_end: "yes"]
   }
 
 }
