@@ -120,7 +120,7 @@ view: derived_monthly_issue_status {
     label: "Created to resolved"
     intervals: [hour,day,week,month]
     sql_start:${TABLE}.started ;;
-    sql_end:  ${resolved_date}  ;;
+    sql_end:  ${TABLE}.resolved  ;;
   }
 
 
