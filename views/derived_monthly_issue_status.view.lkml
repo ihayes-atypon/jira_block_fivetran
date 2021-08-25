@@ -92,6 +92,12 @@ view: derived_monthly_issue_status {
     sql_end:  ${TABLE}.EndOfMonth  ;;
   }
 
+   dimension: raw_month_end_status_name  {
+    type: string
+    label: "Raw month end status"
+    sql:  ${TABLE}.monthEndStatusName;;
+   }
+
   dimension: month_end_status_name {
     type: string
     label: "Month end status"
@@ -174,7 +180,10 @@ view: derived_monthly_issue_status {
   dimension: open_at_month_end {
     type: yesno
     label: "Open at month end"
-    sql:  case when (${resolved_date} is null) OR (${resolved_date} > ${end_of_month_date}) then true else false end;;
+    sql:  case
+            when ((${resolved_date} is null) AND ${TABLE}.monthEndStatusName NOT IN ('Resolved','Closed')) OR (${resolved_date} > ${end_of_month_date}) then true
+            else false
+          end;;
   }
 
   dimension: resolved_in_month {
