@@ -12,10 +12,11 @@ view: derived_monthly_issue_status {
         select
         a.issue_id,
         a.time as changed,
-        a.status_id as newStatusId,
+        CAST(a.value AS INT64) as newStatusId,
         s.name as newStatusName,
-        from issue_status_history a
-        left join status s on a.status_id = s.id
+        from issue_field_history a
+        left join status s on CAST(a.value AS INT64) = s.id
+        where lower(a.field_id) = 'status'
       )
 
       SELECT
