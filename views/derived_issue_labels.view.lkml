@@ -1,22 +1,21 @@
 view: derived_issue_labels {
   derived_table: {
-    sql: select
-      issue_labels._fivetran_id,
-      issue_labels.issue_id,
-      issue_labels.value,
-      issue.created as issue_created,
-      issue_labels_history.time as label_created
-      from issue_labels
-      left join issue on issue_labels.issue_id = issue.id
-      left join issue_labels_history on issue_labels.issue_id = issue_labels_history.issue_id and issue_labels.value = issue_labels_history.value
-       ;;
-  }
+    sql:
 
-  dimension: label_uuid {
-    type: string
-    primary_key: yes
-    hidden: yes
-    sql: ${TABLE}._fivetran_id ;;
+    with ex_issue_labels_history as (
+      SELECT * FROM issue_multiselect_history
+      WHERE field_id = 'labels'
+    )
+
+    select
+      L.issue_id,
+      L.value,
+      issue.created as issue_created,
+      H.time as label_created
+      from issue_labels L
+      left join issue on L.issue_id = issue.id
+      left join ex_issue_labels_history H on L.issue_id = H.issue_id and L.value = H.value
+       ;;
   }
 
   measure: count {

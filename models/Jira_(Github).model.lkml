@@ -19,6 +19,10 @@ persist_with: fivetran_datagroup
 
 # explore: user {}
 
+explore: issue_status_history {
+  label: "old issue status history"
+}
+
 explore: issue {
   label: "Issue"
   join:  issue_component_s {
