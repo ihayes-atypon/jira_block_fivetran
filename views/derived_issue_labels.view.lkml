@@ -8,20 +8,33 @@ view: derived_issue_labels {
     )
 
     select
-      L.issue_id,
-      L.value,
+      H.issue_id,
+      H.value,
       issue.created as issue_created,
-      H.time as label_created
-      from issue_labels L
-      left join issue on L.issue_id = issue.id
-      left join ex_issue_labels_history H on L.issue_id = H.issue_id and L.value = H.value
-       ;;
+      H.time as label_created,
+      H.author_id,
+      H.is_active
+      from ex_issue_labels_history H
+      left join issue on H.issue_id = issue.id
+      ;;
   }
 
   measure: count {
     type: count
     label: "Label count"
     drill_fields: [detail*]
+  }
+
+  dimension: author_id {
+    type: string
+    label: "Author"
+    sql: ${TABLE}.author_id ;;
+  }
+
+  dimension: is_active {
+    type: yesno
+    label: "Is active"
+    sql: ${TABLE}.is_active ;;
   }
 
   dimension: issue_id {

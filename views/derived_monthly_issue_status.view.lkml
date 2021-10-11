@@ -223,4 +223,13 @@ view: derived_monthly_issue_status {
     filters: [open_at_month_end: "yes"]
   }
 
+  measure: average_days_open_at_month_end {
+    type: average
+    label: "Average days open at month end"
+    description: "For issues open at the month end, this is average number of days that have elapsed since the issue was created"
+    value_format_name: decimal_0
+    sql: ${days_created_to_month_end};;
+    filters: [open_at_month_end: "yes"]
+  }
+
 }
