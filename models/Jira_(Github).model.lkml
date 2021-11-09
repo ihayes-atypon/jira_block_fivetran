@@ -100,11 +100,38 @@ explore: issue {
     fields: [comment_user.atypon_user]
     sql_on: ${comment.author_id} = ${comment_user.username} ;;
   }
+
   join: derived_issue_status_history {
     view_label: "Status history"
     relationship: one_to_many
     sql_on: ${issue.id} = ${derived_issue_status_history.issue_id} ;;
   }
+
+  join: status_history_user {
+    from: user
+    view_label: "Status history"
+    relationship: many_to_one
+    fields: [status_history_user.email,status_history_user.atypon_user]
+
+    sql_on:  ${derived_issue_status_history.author_id} = ${status_history_user.id};;
+  }
+
+  join: derived_issue_assignee_history {
+    view_label: "Assignee history"
+    relationship: one_to_many
+    sql_on: ${issue.id} = ${derived_issue_assignee_history.issue_id} ;;
+  }
+
+  join: assignee_history_user {
+    from: user
+    view_label: "Assignee history"
+    relationship: many_to_one
+    fields: [assignee_history_user.atypon_user]
+
+    sql_on:  ${derived_issue_assignee_history.preceding_assignee} = ${assignee_history_user.id};;
+  }
+
+
   # join: issue_labels {
   #   view_label: "Label"
   #   relationship: one_to_many
