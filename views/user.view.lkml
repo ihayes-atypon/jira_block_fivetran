@@ -59,6 +59,12 @@
           sql: STRPOS( LOWER(${TABLE}.EMAIL),'atypon.com') > 0  ;;
         }
 
+        dimension: with_whom {
+          type: string
+          label: "With whom"
+          sql: case when ${atypon_user} = true then 'With Atypon' else 'With client' end   ;;
+        }
+
         # ----- Sets of fields for drilling ------
         set: detail {
           fields: [

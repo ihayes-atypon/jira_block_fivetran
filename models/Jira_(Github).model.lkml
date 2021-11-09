@@ -126,7 +126,7 @@ explore: issue {
     from: user
     view_label: "Assignee history"
     relationship: many_to_one
-    fields: [assignee_history_user.atypon_user]
+    fields: [assignee_history_user.atypon_user,assignee_history_user.with_whom]
 
     sql_on:  ${derived_issue_assignee_history.preceding_assignee} = ${assignee_history_user.id};;
   }
