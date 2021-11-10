@@ -108,7 +108,7 @@ view: derived_issue_assignee_history {
 
   dimension: duration_preceding_now {
     type: number
-    label: "Days with preceeding assignee"
+    label: "Days with preceeding assignee (not closed only)"
     sql: case when ${is_most_recent} then ${days_duration_preceding_now} else ${days_duration_preceding_time} end  ;;
   }
 
