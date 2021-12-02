@@ -1,6 +1,7 @@
 
 view: issue {
   sql_table_name: issue ;;
+  drill_fields: [key]
 
   dimension: id {
     primary_key: yes

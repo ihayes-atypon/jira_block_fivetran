@@ -21,6 +21,7 @@ view: derived_monthly_issue_status {
 
       SELECT
             i.id,
+            i.key,
             i.created as started,
             i.resolved,
             m.EndOfMonth,
@@ -30,7 +31,7 @@ view: derived_monthly_issue_status {
             FROM issue i
             CROSS JOIN reportMonth m
             INNER JOIN ex_issue_state_history e ON i.id = e.issue_id AND e.changed <= m.endOfMonth
-            GROUP BY 1, 2, 3, 4
+            GROUP BY 1, 2, 3, 4, 5
             order by 1,2 asc
        ;;
   }
@@ -45,6 +46,11 @@ view: derived_monthly_issue_status {
     primary_key: yes
     sql: ${TABLE}.id ;;
     hidden: yes
+  }
+
+  dimension: key {
+    type: string
+    sql: ${TABLE}.key ;;
   }
 
   dimension_group: started {
@@ -82,6 +88,7 @@ view: derived_monthly_issue_status {
       quarter,
       year
     ]
+    drill_fields: [key]
     sql: ${TABLE}.EndOfMonth ;;
   }
 
