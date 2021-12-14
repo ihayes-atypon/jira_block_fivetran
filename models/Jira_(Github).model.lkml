@@ -44,6 +44,19 @@ explore: issue {
     fields: [component_project.name]
     sql_on: ${component.project_id} = ${component_project.id} ;;
   }
+
+  join: derived_issue_responsibility {
+    view_label: "Issue"
+    relationship: one_to_one
+    sql_on: ${issue.id} = ${derived_issue_responsibility.issue_id} ;;
+  }
+
+  join: derived_issue_affected_version {
+    view_label: "Issue"
+    relationship: one_to_many
+    sql_on: ${issue.id} = ${derived_issue_affected_version.issue_id} ;;
+  }
+
   join: status {
     view_label: "Issue"
     relationship: many_to_one

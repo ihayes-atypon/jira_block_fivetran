@@ -1,10 +1,11 @@
   view: version {
-    sql_table_name: JIRA.VERSION ;;
+    sql_table_name:version ;;
 
     dimension: id {
       primary_key: yes
       type: number
       sql: ${TABLE}.ID ;;
+      hidden: yes
     }
 
     dimension_group: _fivetran_synced {
@@ -19,12 +20,14 @@
         year
       ]
       sql: ${TABLE}._FIVETRAN_SYNCED ;;
+      hidden:  yes
     }
 
     dimension: archived {
       type: yesno
       sql: ${TABLE}.ARCHIVED ;;
-    }
+      hidden:  yes
+      }
 
     dimension: description {
       type: string
@@ -32,18 +35,22 @@
     }
 
     dimension: name {
+      label: "Version"
+      group_label: "Affected version"
       type: string
       sql: ${TABLE}.NAME ;;
     }
 
     dimension: overdue {
+      label: "Overdue"
+      group_label: "Affected version"
       type: yesno
       sql: ${TABLE}.OVERDUE ;;
     }
 
     dimension: project_id {
       type: number
-      # hidden: yes
+      hidden: yes
       sql: ${TABLE}.PROJECT_ID ;;
     }
 
@@ -57,6 +64,8 @@
         quarter,
         year
       ]
+      label: "Release"
+      group_label: "Affected version"
       convert_tz: no
       datatype: date
       sql: ${TABLE}.RELEASE_DATE ;;
@@ -64,6 +73,8 @@
 
     dimension: released {
       type: yesno
+      label: "Released"
+      group_label: "Affected version"
       sql: ${TABLE}.RELEASED ;;
     }
 
@@ -78,6 +89,8 @@
         year
       ]
       convert_tz: no
+      label: "Start"
+      group_label: "Affected version"
       datatype: date
       sql: ${TABLE}.START_DATE ;;
     }
@@ -85,6 +98,7 @@
     measure: count {
       type: count
       drill_fields: [detail*]
+      hidden: yes
     }
 
     # ----- Sets of fields for drilling ------
