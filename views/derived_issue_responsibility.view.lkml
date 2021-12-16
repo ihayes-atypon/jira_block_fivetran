@@ -2,15 +2,25 @@ view: derived_issue_responsibility {
   derived_table: {
     sql:
 
-    with issue_field_responsibility as (
-       select
+   WITH
+   latest_responsibility as (
+      SELECT
          issue_id,
-         value
-      from issue_field_history f
+         field_id,
+         max(time) as max_time
+      FROM issue_field_history
       where
-         f.field_id = 'customfield_14014'
-      and
-         f.is_active = true
+         field_id = 'customfield_14014'
+      GROUP BY 1,2
+    ),
+    issue_field_responsibility as (
+       select
+         h.issue_id,
+         h.value
+      from issue_field_history h
+      inner join latest_responsibility g on h.issue_id = g.issue_id AND h.field_id = g.field_id AND h.time = g.max_time
+      where
+         h.field_id = 'customfield_14014'
     )
 
     select
