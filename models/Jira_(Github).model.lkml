@@ -21,28 +21,28 @@ persist_with: fivetran_datagroup
 
 
 explore: issue {
+
   label: "Issue"
-  join:  issue_component_s {
+
+  join:  component {
+    view_label: "Component"
     relationship: one_to_many
-    sql_on: ${issue.id} = ${issue_component_s.issue_id} ;;
+    fields: [component.name,component.description]
+    sql_on: ${issue.id} = ${component.issue_id} ;;
   }
+
+  join:  component_project {
+    from: project
+    view_label: "Component"
+    relationship: many_to_one
+    fields: [component_project.name,component_project.key]
+    sql_on: ${component.project_id}} = ${component_project.id} ;;
+  }
+
   join: user {
     view_label: "Creator user"
     relationship: many_to_one
     sql_on: ${issue.creator} = ${user.id} ;;
-  }
-  join: component {
-    view_label: "Component"
-    relationship: one_to_many
-    fields: [component.name,component.description]
-    sql_on: ${component.id} = ${issue_component_s.component_id} ;;
-  }
-  join: component_project {
-    view_label: "Component"
-    from: project
-    relationship: many_to_one
-    fields: [component_project.name]
-    sql_on: ${component.project_id} = ${component_project.id} ;;
   }
 
   join: derived_issue_responsibility {

@@ -1,27 +1,44 @@
   view: component {
-    sql_table_name: component ;;
+    derived_table: {
+      sql:
 
+      WITH latest_component as (
+         SELECT
+            issue_id,
+            field_id,
+            max(time) as max_time
+         FROM issue_multiselect_history
+         WHERE
+            field_id = 'components'
+         GROUP BY 1,2
+       )
+
+     SELECT
+        m._fivetran_id as id,
+        m.issue_id,
+        c.name,
+        c.description,
+        c.project_id
+      FROM issue_multiselect_history m
+      INNER JOIN latest_component g on m.issue_id = g.issue_id AND m.field_id = g.field_id AND m.time = g.max_time
+      LEFT JOIN component c on CAST(m.value AS INT64) = c.id
+      WHERE m.field_id = 'components'
+
+      ;;
+    }
     dimension: id {
       primary_key: yes
-      type: number
+      type: string
       hidden: yes
-      sql: ${TABLE}.ID ;;
+      sql: ${TABLE}.id ;;
     }
 
-    dimension_group: _fivetran_synced {
-      type: time
+    dimension:  issue_id {
+      type: number
+      label: "issue_id"
       hidden: yes
-      timeframes: [
-        raw,
-        time,
-        date,
-        week,
-        month,
-        quarter,
-        year
-      ]
-      sql: ${TABLE}._FIVETRAN_SYNCED ;;
-    }
+      sql: ${TABLE}.issue_id ;;
+      }
 
     dimension: description {
       type: string
@@ -33,10 +50,9 @@
       sql: ${TABLE}.NAME ;;
     }
 
-    dimension: project_id {
+    dimension:project_id {
       type: number
-      hidden: yes
-      sql: ${TABLE}.PROJECT_ID ;;
+      sql: ${TABLE}.project_id    ;;
     }
 
     measure: count {
