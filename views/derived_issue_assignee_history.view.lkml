@@ -77,7 +77,6 @@ view: derived_issue_assignee_history {
 
   dimension_group: preceding_time {
     type: time
-    group_label: "Preceding time"
     timeframes: [
       raw,
       time,
@@ -114,7 +113,6 @@ view: derived_issue_assignee_history {
 
   dimension_group: started {
     type: time
-    group_label: "Started"
     timeframes: [
       raw,
       time,
@@ -129,7 +127,6 @@ view: derived_issue_assignee_history {
 
   dimension_group: duration_start {
     type: duration
-    group_label: "Started"
     label: "Duration start"
     sql_start:${TABLE}.started  ;;
     sql_end:  ${TABLE}.time ;;
