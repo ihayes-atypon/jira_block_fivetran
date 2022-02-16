@@ -180,6 +180,12 @@ view: issue {
     sql: ${TABLE}.key ;;
   }
 
+  dimension: key_with_summary {
+    label: "Key/Summary"
+    type: string
+    sql: CONCAT(${TABLE}.key," : ", ${summary} );;
+  }
+
   dimension: nps {
     label: "NPS"
     type: number
