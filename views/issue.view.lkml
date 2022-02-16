@@ -524,6 +524,7 @@ view: issue {
 
   dimension: customfield_10202 {
     type: number
+    hidden: yes
     label: "customfield_10202"
     sql: ${TABLE}.customfield_10202 ;;
   }

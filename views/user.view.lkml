@@ -9,6 +9,7 @@
 
         dimension_group: _fivetran_synced {
           type: time
+          hidden:  yes
           timeframes: [
             raw,
             time,

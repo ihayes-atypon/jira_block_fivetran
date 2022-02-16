@@ -96,7 +96,6 @@ view: derived_issue_status_history {
 
   dimension_group: preceding_time {
     type: time
-    group_label: "Preceding"
     timeframes: [
       raw,
       time,
@@ -111,7 +110,6 @@ view: derived_issue_status_history {
 
   dimension_group: duration_preceding {
     type: duration
-    group_label: "Preceding"
     label: "Duration preceding"
     sql_start:${TABLE}.preceding_time  ;;
     sql_end:  ${TABLE}.time ;;
@@ -120,7 +118,6 @@ view: derived_issue_status_history {
 
   dimension_group: started {
     type: time
-    group_label: "Started"
     timeframes: [
       raw,
       time,
@@ -135,7 +132,6 @@ view: derived_issue_status_history {
 
   dimension_group: duration_start {
     type: duration
-    group_label: "Started"
     label: "Duration start"
     sql_start:${TABLE}.started  ;;
     sql_end:  ${TABLE}.time ;;
