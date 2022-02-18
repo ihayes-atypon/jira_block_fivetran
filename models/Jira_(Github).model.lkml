@@ -36,7 +36,7 @@ explore: issue {
     view_label: "Component"
     relationship: many_to_one
     fields: [component_project.name,component_project.key]
-    sql_on: ${component.project_id}} = ${component_project.id} ;;
+    sql_on: ${component.project_id} = ${component_project.id} ;;
   }
 
   join: user {
