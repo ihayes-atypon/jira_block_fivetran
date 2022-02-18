@@ -1,38 +1,70 @@
 view: derived_monthly_issue_status {
   derived_table: {
-    sql: WITH reportMonth AS (
-         SELECT TIMESTAMP_SUB(TIMESTAMP(endOfMonthDate),INTERVAL 1 SECOND) as endOfMonth FROM UNNEST(
+    sql:
+
+    WITH
+    reportMonth AS (
+       SELECT
+         TIMESTAMP_SUB(TIMESTAMP(endOfMonthDate),INTERVAL 1 SECOND) as endOfMonth
+        FROM UNNEST(
                    GENERATE_DATE_ARRAY(
                            DATE_SUB(DATE_TRUNC(DATE_ADD(CURRENT_DATE(),INTERVAL 1 MONTH),MONTH),INTERVAL 253 MONTH),
                            DATE_TRUNC(DATE_ADD(CURRENT_DATE(),INTERVAL 1 MONTH),MONTH),
                           INTERVAL 1 MONTH)
         ) AS endOfMonthDate
       ),
-      ex_issue_state_history as (
-        select
-        a.issue_id,
-        a.time as changed,
-        CAST(a.value AS INT64) as newStatusId,
-        s.name as newStatusName,
-        from issue_field_history a
-        left join status s on CAST(a.value AS INT64) = s.id
-        where lower(a.field_id) = 'status'
-      )
-
+    flatten1 as (
+       SELECT
+          issue_id,
+          time,
+          field_id,
+          value,
+          case when lower(field_id) = 'assignee' then value else null end as assignee,
+          case when lower(field_id) = 'status' then CAST(value as INT64) else null end as statusId,
+       FROM
+          issue_field_history
+       WHERE
+          lower(field_id) IN ('assignee','status')
+    ),
+    flatten2 as (
+       SELECT
+         issue_id,
+         time,
+         field_id,
+         value,
+         assignee,
+         case when assignee is null then LAST_VALUE(assignee IGNORE NULLS) OVER (PARTITION BY issue_id ORDER BY time asc) else assignee end as assignee1,
+         case when statusId is null then LAST_VALUE(statusId IGNORE NULLS) OVER (PARTITION BY issue_id ORDER BY time asc) else statusId end as statusId2
+       FROM
+          flatten1 f
+       ORDER BY 1,2 asc
+    ),
+    ex_issue_state_history as (
       SELECT
-            i.id,
-            i.key,
-            i.created as started,
-            i.resolved,
-            m.EndOfMonth,
-            ARRAY_AGG(newStatusName ORDER BY changed DESC)[OFFSET(0)] as monthEndStatusName,
-            ARRAY_AGG(newStatusId ORDER BY changed DESC)[OFFSET(0)] as monthEndStatusId,
-            ARRAY_AGG(changed ORDER BY changed DESC)[OFFSET(0)] as mostRecentChange,
-            FROM issue i
-            CROSS JOIN reportMonth m
-            INNER JOIN ex_issue_state_history e ON i.id = e.issue_id AND e.changed <= m.endOfMonth
-            GROUP BY 1, 2, 3, 4, 5
-            order by 1,2 asc
+        issue_id,
+        time as changed,
+        statusId2 as newStatusId,
+        s.name as newStatusName,
+        assignee1 as newAssignee
+      FROM flatten2 f
+      LEFT JOIN status s on f.statusId2 = s.id
+    )
+
+    SELECT
+      i.id,
+      i.key,
+      i.created as started,
+      i.resolved,
+      m.EndOfMonth,
+      ARRAY_AGG(newAssignee ORDER BY changed DESC)[OFFSET(0)] as monthEndAssignee,
+      ARRAY_AGG(newStatusName ORDER BY changed DESC)[OFFSET(0)] as monthEndStatusName,
+      ARRAY_AGG(newStatusId ORDER BY changed DESC)[OFFSET(0)] as monthEndStatusId,
+      ARRAY_AGG(changed ORDER BY changed DESC)[OFFSET(0)] as mostRecentChange,
+    FROM issue i
+    CROSS JOIN reportMonth m
+    INNER JOIN ex_issue_state_history e ON i.id = e.issue_id AND e.changed <= m.endOfMonth
+    GROUP BY 1, 2, 3, 4, 5
+    order by 1,2 asc
        ;;
   }
 
@@ -105,6 +137,12 @@ view: derived_monthly_issue_status {
     label: "Raw month end status"
     sql:  ${TABLE}.monthEndStatusName;;
    }
+
+  dimension:  month_end_assignee {
+    type: string
+    label: "Month end assignee"
+    sql: ${TABLE}.monthEndAssignee  ;;
+  }
 
   dimension: month_end_status_name {
     type: string

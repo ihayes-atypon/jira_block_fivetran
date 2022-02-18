@@ -182,4 +182,13 @@ explore: issue {
 
   }
 
+  join: monthly_history_user {
+    view_label: "Monthly status history"
+    from: user
+    relationship: many_to_one
+    fields: [monthly_history_user.atypon_user,monthly_history_user.with_whom]
+    sql_on:  ${derived_monthly_issue_status.month_end_assignee} = ${monthly_history_user.id};;
+
+  }
+
 }
