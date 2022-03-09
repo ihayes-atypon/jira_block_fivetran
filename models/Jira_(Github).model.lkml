@@ -191,4 +191,22 @@ explore: issue {
 
   }
 
+
+  join: derived_weekly_issue_status {
+    view_label: "Weekly status history"
+    relationship: one_to_many
+    sql_on: ${issue.id} = ${derived_weekly_issue_status.id} ;;
+
+  }
+
+  join: weekly_history_user {
+    view_label: "Weekly status history"
+    from: user
+    relationship: many_to_one
+    fields: [weekly_history_user.atypon_user,weekly_history_user.with_whom]
+    sql_on:  ${derived_weekly_issue_status.week_end_assignee} = ${weekly_history_user.id};;
+
+  }
+
+
 }
