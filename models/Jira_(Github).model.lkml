@@ -160,6 +160,11 @@ explore: issue {
     relationship: one_to_many
     sql_on: ${issue.id} = ${derived_issue_labels.issue_id} ;;
   }
+  join: issue_active_labels {
+    view_label: "Issue"
+    relationship: one_to_one
+    sql_on: ${issue.id} = ${issue_active_labels.issue_id} ;;
+  }
   join: epic {
     view_label: "EPIC"
     relationship: many_to_one
