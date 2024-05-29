@@ -96,6 +96,11 @@ explore: issue {
     relationship: many_to_one
     sql_on: ${issue.project} = ${project.id} ;;
   }
+  join: issue_link {
+    view_label: "Issue Link"
+    relationship: one_to_many
+    sql_on: ${issue.id} = ${issue_link.issue_id} ;;
+  }
   join: project_category {
     view_label: "Project category"
     relationship: many_to_one

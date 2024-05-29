@@ -1,20 +1,19 @@
 view: issue_link {
-  sql_table_name: JIRA.ISSUE_LINK ;;
-
-  dimension: _fivetran_synced {
-    type: string
-    sql: ${TABLE}._FIVETRAN_SYNCED ;;
+  derived_table: {
+    sql: select * from jira.v_issue_link ;;
   }
 
+
   dimension: issue_id {
+    primary_key: yes
     type: number
-    # hidden: yes
+     hidden: yes
     sql: ${TABLE}.ISSUE_ID ;;
   }
 
-  dimension: related_issue_id {
-    type: number
-    sql: ${TABLE}.RELATED_ISSUE_ID ;;
+  measure: count {
+    type: count
+    label: "Linked Issues count"
   }
 
   dimension: relationship {
@@ -22,8 +21,23 @@ view: issue_link {
     sql: ${TABLE}.RELATIONSHIP ;;
   }
 
-  measure: count {
-    type: count
-    drill_fields: [issue.id, issue.epic_name]
+  dimension: key {
+    type: string
+    sql: ${TABLE}.key ;;
   }
+  dimension_group: created {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}.created ;;
+  }
+
+
 }
