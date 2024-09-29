@@ -125,6 +125,12 @@ explore: issue {
     sql_on: ${issue.id} = ${derived_issue_status_history.issue_id} ;;
   }
 
+  join: derived_issue_sprint_assign_history {
+    view_label: "Sprints"
+    relationship: one_to_many
+    sql_on: ${issue.id} = ${derived_issue_sprint_assign_history.issue_id} ;;
+  }
+
   join: status_history_user {
     from: user
     view_label: "Status history"
